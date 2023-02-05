@@ -115,11 +115,10 @@ left: 1rem;
     top:17vh;
     left:5vw
   }
+
   .movies-card{
     width: 40vw;
     margin:0.3rem;        
-
-
   }
   .movies-button{
     width: 80%;
@@ -130,4 +129,19 @@ left: 1rem;
   }
 
   
+}
+
+@media screen and (min-width: 430px) and (max-width:770px) {
+  .movies-card{
+    width: 45vw;
+    margin:0.3rem;        
+  }
+
+  .movies-button{
+    width: 80%;
+  }
+  .movies-img{
+    width: 45vw;
+    
+  }
 }
