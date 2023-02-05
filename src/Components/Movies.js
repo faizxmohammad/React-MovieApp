@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React, { Component , useState, useEffect } from "react";
 // import { movies } from "./getMovies";
 import axios from "axios";
+
 
 export default class extends Component {
   constructor() {
@@ -11,6 +12,7 @@ export default class extends Component {
       currPage:1,
       movies:[],
     };
+
   }
 
   async componentDidMount(){
@@ -31,15 +33,19 @@ export default class extends Component {
     // console.log(data);
     this.setState({
       movies:[...data.results]
-    })
+    },() =>{window.scrollTo(0,0)}
+    )
 
   }
   handleClick = (value) =>{
     if(value != this.state.currPage){
       this.setState({currPage: value},this.changeMovies)
+      
     }
+
     
   }
+
 
   handleRight = () =>{
     let tempArr = []
@@ -120,7 +126,6 @@ export default class extends Component {
                 </ul>
               </nav>
             </div>
-  
           </div>    
         )
       }
