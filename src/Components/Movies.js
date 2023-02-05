@@ -1,4 +1,4 @@
-import React, { Component , useState, useEffect } from "react";
+import React, { Component } from "react";
 // import { movies } from "./getMovies";
 import axios from "axios";
 
@@ -38,7 +38,7 @@ export default class extends Component {
 
   }
   handleClick = (value) =>{
-    if(value != this.state.currPage){
+    if(value !== this.state.currPage){
       this.setState({currPage: value},this.changeMovies)
       
     }
@@ -60,7 +60,7 @@ export default class extends Component {
 
 
   handlePrevious = () =>{
-    if(this.state.currPage != 1){
+    if(this.state.currPage !== 1){
       this.setState({
         currPage:this.state.currPage - 1
       },this.changeMovies)
@@ -73,7 +73,7 @@ export default class extends Component {
     // let movie = movies.results
     return (
       <> {
-        this.state.movies.length == 0 ? (
+        this.state.movies.length === 0 ? (
           <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
@@ -92,7 +92,7 @@ export default class extends Component {
                     </h5>
                     <div className="button-wrapper" style={{display: "flex",justifyContent: "center",width: "100%"}}>
                       {
-                        this.state.hover == movieObj.id && (
+                        this.state.hover === movieObj.id && (
                           <a className="btn btn-primary movies-button">
                             Add to Favorite
                           </a>
