@@ -127,10 +127,15 @@ left: 1rem;
     width: 40vw;
     
   }
-
-  
 }
 
+.favourite-genres{
+  padding: 3rem;
+}
+
+.favourite-table{
+  padding: 3rem;
+}
 @media screen and (min-width: 430px) and (max-width:770px) {
   .movies-card{
     width: 45vw;

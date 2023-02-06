@@ -25,8 +25,7 @@ export default class extends Component {
     })
   }
 
-
-   changeMovies = async () =>{
+  changeMovies = async () =>{
     let cPage = this.state.currPage;
     const res = await axios.get(`https://api.themoviedb.org/3/movie/popular?api_key=f32b596eb47cf1813b4e0abf79592446&language=en-US&page=${cPage}`)
     let data = res.data;
@@ -34,17 +33,13 @@ export default class extends Component {
     this.setState({
       movies:[...data.results]
     },() =>{window.scrollTo(0,0)}
-    )
+    )}
 
-  }
+
   handleClick = (value) =>{
     if(value != this.state.currPage){
       this.setState({currPage: value},this.changeMovies)
-      
-    }
-
-    
-  }
+    }}
 
 
   handleRight = () =>{
@@ -69,13 +64,11 @@ export default class extends Component {
 
 
   render() {
-
-    // let movie = movies.results
     return (
       <> {
         this.state.movies.length == 0 ? (
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Loading...</span>
+          <div class="spinner-border text-primary loader" role="status">
+            <span class="visually-hidden loader">Loading...</span>
           </div>
         ) : (
           <div>
