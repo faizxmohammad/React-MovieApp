@@ -99,6 +99,14 @@ left: 1rem;
   height: 40vh;
   width:20vw ;
 }
+.favourite-genres{
+  padding: 3rem;
+}
+
+.favourite-table{
+  padding: 3rem;
+  overflow: auto;
+}
 
 @media screen and (max-width:415px) {
   .banner-card{
@@ -125,18 +133,19 @@ left: 1rem;
   }
   .movies-img{
     width: 40vw;
+    height: 25vh;
     
   }
+  .row{
+    padding: 0.8rem;
+    max-width: fit-content;
+  }
+
 }
 
-.favourite-genres{
-  padding: 3rem;
-}
 
-.favourite-table{
-  padding: 3rem;
-  overflow: auto;
-}
+
+
 @media screen and (min-width: 430px) and (max-width:770px) {
   .movies-card{
     width: 45vw;
@@ -149,5 +158,9 @@ left: 1rem;
   .movies-img{
     width: 45vw;
     
+  }
+  .row{
+    padding: 0.8rem;
+    max-width: fit-content;
   }
 }
