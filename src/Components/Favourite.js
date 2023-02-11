@@ -11,6 +11,7 @@ export default class Favourite extends Component {
       moviesData: [],
       currText:'',
       limit:5,
+      currPage:1,
 
     };
   }
@@ -33,6 +34,8 @@ export default class Favourite extends Component {
       moviesData: [...data]
     })
   }
+
+
   handleGenreChange = (genre) => {
     this.setState({
       currGenre: genre
@@ -82,7 +85,24 @@ export default class Favourite extends Component {
     this.setState({
       moviesData:[...temp]
     })
+  }
 
+  handlePageChange = (page) =>{
+    this.setState({
+      currPage:page
+    })
+
+
+  }
+  handleDelete = (id) =>{
+    let newArr = [];
+    newArr = this.state.moviesData.filter((movieObj) =>{
+      return movieObj.id != id
+    })
+    this.setState({
+      moviesData:[...newArr]
+    })
+    localStorage.setItem("movies-app" , JSON.stringify(newArr))
 
   }
 
@@ -116,13 +136,23 @@ export default class Favourite extends Component {
     if(this.state.currGenre !== 'All Genres'){
       filterArr = this.state.moviesData.filter((movieObj)=>genreids[movieObj.genre_ids[0]]==this.state.currGenre);
     }
+    let pages = Math.ceil(filterArr.length / this.state.limit);
+    let pagesArr = []
+    for(let i = 1 ; i <= pages;i++){
+      pagesArr.push(i)
+    }
+
+    let startIndex = (this.state.currPage - 1) * this.state.limit;
+    let lastIndex = startIndex +  this.state.limit;
+
+    filterArr = filterArr.slice(startIndex,lastIndex)
 
     return (
       <div>
         <>
           <div className="main">
             <div className="row">
-              <div className="col-3">
+              <div className="col-lg-3 col-sm-12">
                 <ul className="list-group favourite-genres">
                   {this.state.genres.map((genre) =>
                     this.state.currGenre == genre ?
@@ -132,7 +162,7 @@ export default class Favourite extends Component {
                   )}
                 </ul>
               </div>
-              <div className="col 9 favorites-table">
+              <div className="col-lg-9 favorites-table col-sm-12">
                 <div className="row">
                   <input
                     type="text"
@@ -143,7 +173,7 @@ export default class Favourite extends Component {
                     type="number"
                     style={{ margin: "1rem" }}
                     className="input-group-text col"
-                    placeholder="Rows count"></input>
+                    placeholder="Rows count" value={this.state.limit} onChange={(e)=>this.setState({limit: e.target.value})}></input>
                 </div>
                 <div className="row"> 
                   <table class="table">
@@ -176,7 +206,7 @@ export default class Favourite extends Component {
                             <td>{movieObj.popularity}</td>
                             <td>{movieObj.vote_average}</td>
                             <td>
-                              <button type="button" class="btn btn-danger">Delete </button>
+                              <button type="button" class="btn btn-danger" onClick={() => this.handleDelete(movieObj.id)}>Delete </button>
                             </td>
                           </tr>
                         ))}
@@ -186,15 +216,12 @@ export default class Favourite extends Component {
 
                 <nav aria-label="Page navigation example">
                   <ul class="pagination">
-                    <li class="page-item">
-                      <a class="page-link" href="#"> 1 </a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#"> 2 </a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="#"> 3 </a>
-                    </li>
+                  {
+                   pagesArr.map((page)=>(
+                    <li className="page-item"><a className="page-link" style={{cursor:'pointer'}} onClick={ () =>this.handlePageChange(page)}>{page}</a></li>
+                   ))
+                  }
+                
                   </ul>
                 </nav>
               </div>

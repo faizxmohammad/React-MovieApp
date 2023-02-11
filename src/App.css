@@ -135,6 +135,7 @@ left: 1rem;
 
 .favourite-table{
   padding: 3rem;
+  overflow: auto;
 }
 @media screen and (min-width: 430px) and (max-width:770px) {
   .movies-card{
