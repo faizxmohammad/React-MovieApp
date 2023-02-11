@@ -8,36 +8,18 @@ export default class Favourite extends Component {
     this.state = {
       genres: [],
       currGenre: "All Genres",
-      moviesData: []
+      moviesData: [],
+      currText:'',
+      limit:5,
+
     };
   }
 
 
-
-
   componentDidMount() {
+    let genreids ={ 28: "Action", 12: "Adventure", 16: "Animation", 35: "Comedy", 80: "Crime", 99: "Documentary", 18: "Drama", 10751: "Family", 14: "Fantasy", 36: "History", 27: "Horror", 10402: "Music", 9648: "Mystery", 10749: "Romance", 878: "Sci-Fi", 10770: "TV", 53: "Thriller", 10752: "War", 37: "Western", }; 
+
     let data = JSON.parse(localStorage.getItem('movies-app') || "[]")
-    let genreids = {
-      28: "Action",
-      12: "Adventure",
-      16: "Animation",
-      35: "Comedy",
-      80: "Crime",
-      99: "Documentary",
-      18: "Drama",
-      10751: "Family",
-      14: "Fantasy",
-      36: "History",
-      27: "Horror",
-      10402: "Music",
-      9648: "Mystery",
-      10749: "Romance",
-      878: "Sci-Fi",
-      10770: "TV",
-      53: "Thriller",
-      10752: "War",
-      37: "Western",
-    };
 
     let temp = []
     data.forEach((movieObj) => {
@@ -50,13 +32,58 @@ export default class Favourite extends Component {
       genres: [...temp],
       moviesData: [...data]
     })
-
   }
-
   handleGenreChange = (genre) => {
     this.setState({
       currGenre: genre
     })
+  }
+
+
+  sortPopularityDesc = () =>{
+    let temp = this.state.moviesData;
+    temp.sort(function(objA,objB){
+      return objB.popularity - objA.popularity; 
+    })
+    this.setState({
+      moviesData:[...temp]
+    })
+  }
+
+
+  sortPopularityAesc = () =>{
+    let temp = this.state.moviesData;
+    temp.sort(function(objA,objB){
+      return objA.popularity - objB.popularity; 
+    })
+    this.setState({
+      moviesData:[...temp]
+    })
+  }
+
+
+
+  sortRatingAesc = () =>{
+    let temp = this.state.moviesData;
+    temp.sort(function(objA,objB){
+      return objA.vote_average - objB.vote_average; 
+    })
+    this.setState({
+      moviesData:[...temp]
+    })
+
+  }
+
+  sortRatingDesc = () =>{
+    let temp = this.state.moviesData;
+    temp.sort(function(objA,objB){
+      return objB.vote_average - objA.vote_average ; 
+    })
+    this.setState({
+      moviesData:[...temp]
+    })
+
+
   }
 
 
@@ -67,27 +94,28 @@ export default class Favourite extends Component {
     //   genres: [...temp],
     // });
     // console.log(temp);
-    let genreids = {
-      28: "Action",
-      12: "Adventure",
-      16: "Animation",
-      35: "Comedy",
-      80: "Crime",
-      99: "Documentary",
-      18: "Drama",
-      10751: "Family",
-      14: "Fantasy",
-      36: "History",
-      27: "Horror",
-      10402: "Music",
-      9648: "Mystery",
-      10749: "Romance",
-      878: "Sci-Fi",
-      10770: "TV",
-      53: "Thriller",
-      10752: "War",
-      37: "Western",
-    };
+    let genreids = {28: "Action", 12: "Adventure", 16: "Animation", 35: "Comedy", 80: "Crime", 99: "Documentary", 18: "Drama", 10751: "Family", 14: "Fantasy", 36: "History", 27: "Horror", 10402: "Music", 9648: "Mystery", 10749: "Romance", 878: "Sci-Fi", 10770: "TV", 53: "Thriller", 10752: "War", 37: "Western",};
+
+    let filterArr = [];
+
+    if(this.currText == ''){
+      filterArr = this.state.moviesData;
+    }else{
+      filterArr = this.state.moviesData.filter((movieObj)=>{
+        let title = movieObj.original_title.toLowerCase();
+        return title.includes(this.state.currText.toLowerCase())
+      })
+    }
+
+
+
+      
+    // if(this.state.currGenre == 'All Genres'){
+    //   filterArr = this.state.moviesData;
+    // }
+    if(this.state.currGenre !== 'All Genres'){
+      filterArr = this.state.moviesData.filter((movieObj)=>genreids[movieObj.genre_ids[0]]==this.state.currGenre);
+    }
 
     return (
       <div>
@@ -98,9 +126,9 @@ export default class Favourite extends Component {
                 <ul className="list-group favourite-genres">
                   {this.state.genres.map((genre) =>
                     this.state.currGenre == genre ?
-                      <li className="list-group-item" style={{ background: "#3f51b5", color: "white", fontWeight: "bold" }} >{genre} </li>
+                      <li className="list-group-item" style={{ background: "#3f51b5", color: "white", cursor: 'pointer', fontWeight: "bold" }} >{genre} </li>
                       :
-                      <li className="list-group-item" style={{ background: "white", color: "#3f51b5" }} onClick={() => this.handleGenreChange(genre)}>{genre}</li>
+                      <li className="list-group-item" style={{ background: "white", color: "#3f51b5", cursor: 'pointer' }} onClick={() => this.handleGenreChange(genre)}>{genre}</li>
                   )}
                 </ul>
               </div>
@@ -110,34 +138,34 @@ export default class Favourite extends Component {
                     type="text"
                     style={{ margin: "1rem" }}
                     className="input-group-text col"
-                    placeholder="Search here"></input>
+                    placeholder="Search here" value={this.state.currText} onChange={(e)=>this.setState({currText:e.target.value})}></input>
                   <input
                     type="number"
                     style={{ margin: "1rem" }}
                     className="input-group-text col"
                     placeholder="Rows count"></input>
                 </div>
-                <div className="row">
+                <div className="row"> 
                   <table class="table">
                     <thead>
                       <tr>
                         <th scope="col">Title</th>
                         <th scope="col">Genre</th>
-                        <th scope="col">Popularity</th>
-                        <th scope="col">Rating</th>
+                        <th scope="col"> <i class="fa-solid fa-sort-up" onClick={this.sortPopularityDesc} style={{cursor:'pointer'}}>
+                        </i> Popularity <i class="fa-solid fa-sort-down" onClick={this.sortPopularityAesc} style={{cursor:'pointer'}}></i></th>
+
+                        <th scope="col"> <i class="fa-solid fa-sort-up"  onClick={this.sortRatingDesc} style={{cursor:'pointer'}}></i> Rating <i class="fa-solid fa-sort-down" onClick={this.sortRatingAesc} style={{cursor:'pointer'}}></i></th>
+                        {/* <th scope="col">Rating</th> */}
                         <th scope="col"></th>
                       </tr>
                     </thead>
                     <tbody>
                       {
-                        this.state.moviesData.map((movieObj) => (
+                        filterArr.map((movieObj) => (
                           <tr>
                             <td>
                               <img
-                                style={{
-                                  width: "5rem",
-                                  marginRight: "1rem",
-                                  borderRadius: "2px",
+                                style={{ width: "5rem" ,marginRight: "1rem" ,borderRadius: "2px",
                                 }}
                                 src={`https://image.tmdb.org/t/p/original${movieObj.backdrop_path}`}
                                 alt={movieObj.title}
@@ -148,10 +176,7 @@ export default class Favourite extends Component {
                             <td>{movieObj.popularity}</td>
                             <td>{movieObj.vote_average}</td>
                             <td>
-                              {" "}
-                              <button type="button" class="btn btn-danger">
-                                Delete
-                              </button>
+                              <button type="button" class="btn btn-danger">Delete </button>
                             </td>
                           </tr>
                         ))}
@@ -162,19 +187,13 @@ export default class Favourite extends Component {
                 <nav aria-label="Page navigation example">
                   <ul class="pagination">
                     <li class="page-item">
-                      <a class="page-link" href="#">
-                        1
-                      </a>
+                      <a class="page-link" href="#"> 1 </a>
                     </li>
                     <li class="page-item">
-                      <a class="page-link" href="#">
-                        2
-                      </a>
+                      <a class="page-link" href="#"> 2 </a>
                     </li>
                     <li class="page-item">
-                      <a class="page-link" href="#">
-                        3
-                      </a>
+                      <a class="page-link" href="#"> 3 </a>
                     </li>
                   </ul>
                 </nav>

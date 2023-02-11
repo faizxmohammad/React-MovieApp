@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import React, { Component }  from 'react';
+import React from 'react';
 import Navbar from './Components/Navbar';
 import Banner from './Components/Banner';
 import Movies from './Components/Movies';
@@ -19,16 +19,16 @@ function App() {
       <Routes>
       
       <Route exact path="/" element={<HomePage/>}/>
-      <Route exact path="/favourites" element={<Favourite/>}/>
+      <Route exact path="/favourites" element={<>
+        <Favourite/>
+      </>
+    }/>
       
       </Routes>
     
     </BrowserRouter>
   );
 }
-
-
-
 
 function HomePage() {
   return (
